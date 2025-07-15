@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:visual_search/features/products/presentation/cubit/product_cubit.dart';
 import 'package:visual_search/features/products/presentation/widgets/product_card.dart';
-
 import '../../../../core/constants/constants.dart';
 import '../widgets/product_detail_page.dart';
 
@@ -19,7 +18,7 @@ class _ShopPageState extends State<ShopPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<ProductCubit>().getPerCategory();
+    context.read<ProductCubit>().getAllProducts();
   }
 
   @override
@@ -38,8 +37,10 @@ class _ShopPageState extends State<ShopPage> {
               BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
                   if (state is ProductData) {
+                    final products = context.read<ProductCubit>().extraProducts;
+
                     return CarouselSlider.builder(
-                      itemCount: state.products.length,
+                      itemCount: products.length,
                       options: CarouselOptions(
                         height: 200.0,
                         autoPlay: true,
@@ -50,7 +51,7 @@ class _ShopPageState extends State<ShopPage> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ProductDetailPage(
-                                model: state.products[index],
+                                model: products[index],
                               ),
                             ));
                           },
@@ -65,7 +66,7 @@ class _ShopPageState extends State<ShopPage> {
                               children: [
                                 Flexible(
                                   child: Image.network(
-                                    state.products[index].images[0],
+                                    products[index].images[0],
                                     fit: BoxFit.fitWidth,
                                   ),
                                 ),
@@ -75,7 +76,7 @@ class _ShopPageState extends State<ShopPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        state.products[index].title,
+                                        products[index].title,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
@@ -94,7 +95,7 @@ class _ShopPageState extends State<ShopPage> {
                                                   defaultBorderRadious)),
                                         ),
                                         child: Text(
-                                          "${state.products[index].discountRate.toInt()}% off",
+                                          "${products[index].discountRate.toInt()}% off",
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
@@ -182,6 +183,7 @@ class _ShopPageState extends State<ShopPage> {
                     if (state is ProductData) {
                       return GridView.builder(
                         scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8,

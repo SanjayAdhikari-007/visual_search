@@ -7,23 +7,29 @@ import '../../data/models/product_model.dart';
 part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
-  List<ProductModel> catProducts = [];
+  List<ProductModel> popProducts = [];
+  List<ProductModel> extraProducts = [];
   final ProductRepository repository;
   ProductCubit(this.repository) : super(ProductInitial());
 
   void getAllProducts() async {
     emit(ProductLoading());
-    final List<ProductModel> results = await repository.getAllProducts();
-    emit(ProductData(results));
+    if (popProducts.isEmpty) {
+      final List<ProductModel> results = await repository.getAllProducts();
+      popProducts = results.getRange(0, 8).toList();
+      extraProducts = results.getRange(8, results.length - 1).toList();
+    }
+
+    emit(ProductData(popProducts));
   }
 
   void getPerCategory() async {
     emit(ProductLoading());
-    if (catProducts.isEmpty) {
+    if (popProducts.isEmpty) {
       final List<ProductModel> results = await repository.getPerCategory();
-      catProducts = results;
+      popProducts = results;
     }
-    emit(ProductData(catProducts));
+    emit(ProductData(popProducts));
   }
 
   void getAllProductsByCategory(String categoryId) async {

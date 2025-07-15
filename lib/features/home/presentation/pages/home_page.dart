@@ -160,7 +160,9 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     height: 25,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
                         image: DecorationImage(
                           image: FileImage(state.imageFile),
                           fit: BoxFit.cover,

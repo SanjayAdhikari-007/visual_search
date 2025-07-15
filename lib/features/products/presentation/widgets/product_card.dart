@@ -67,10 +67,10 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               model.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontSize: 16),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    fontSize: 16,
+                    overflow: TextOverflow.ellipsis,
+                  ),
             ),
             model.discountRate != 0
                 ? Row(
@@ -84,12 +84,16 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: defaultPadding / 4),
-                      Text(
-                        "\$${model.price}",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyMedium!.color,
-                          fontSize: 14,
-                          decoration: TextDecoration.lineThrough,
+                      Flexible(
+                        child: Text(
+                          "\$${model.price}",
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyMedium!.color,
+                            fontSize: 14,
+                            decoration: TextDecoration.lineThrough,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],
@@ -100,6 +104,7 @@ class ProductCard extends StatelessWidget {
                       color: Color(0xFF31B0D8),
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   )
           ],

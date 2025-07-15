@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:intl/intl.dart';
 import 'package:visual_search/features/discover/presentation/cubit/discover_cubit.dart';
 import 'package:visual_search/features/products/data/models/product_model.dart';
 
@@ -31,7 +32,28 @@ class ProductDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("\$${model.priceAfterDiscount}"),
+                      Row(
+                        spacing: 5,
+                        children: [
+                          Text("\$${model.priceAfterDiscount}"),
+                          Text("\$${model.price}",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .color!
+                                    .withValues(alpha: 0.6),
+                                fontSize: 14,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .color!
+                                    .withValues(alpha: 0.6),
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                        ],
+                      ),
                       Text("Unit Price"),
                     ],
                   ),
@@ -102,7 +124,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   Text(" | "),
                   Text(
-                    "${context.read<DiscoverCubit>().categoryFromId(model.category).name} ",
+                    "${context.read<DiscoverCubit>().categoryFromId(model.category)?.name} ",
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall!
@@ -132,6 +154,13 @@ class ProductDetailPage extends StatelessWidget {
                       child: Text("Out of Stock"),
                     ),
                 ],
+              ),
+              Text(
+                "Color: ${model.color}",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontSize: 14),
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
@@ -166,7 +195,8 @@ class ProductDetailPage extends StatelessWidget {
                           .bodySmall!
                           .copyWith(fontSize: 13)),
                   Text(
-                    model.createdAt,
+                    DateFormat("d MMM, yyyy")
+                        .format(DateTime.parse(model.createdAt)),
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!

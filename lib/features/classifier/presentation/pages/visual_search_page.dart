@@ -53,7 +53,12 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
                 return Container();
               },
             ),
-            Text(" Visual Search: ${widget.categoryName} ${widget.color}"),
+            Flexible(
+              child: Text(
+                " Visual Search: ${widget.categoryName} ${widget.color}  jfjsfjdsjfjf f ifisji fjfi ojfo j f",
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
       ),

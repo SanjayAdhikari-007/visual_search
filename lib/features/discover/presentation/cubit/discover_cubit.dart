@@ -27,13 +27,13 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     emit(DiscoverSingleData(results));
   }
 
-  CategoryModel categoryFromId(String id) {
+  CategoryModel? categoryFromId(String id) {
     try {
       final cat = categories.firstWhere((element) => element.id == id);
       return cat;
     } catch (e) {
       print(e);
-      rethrow;
+      return null;
     }
   }
 }

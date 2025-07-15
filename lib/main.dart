@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, isLoggedIn) {
           if (isLoggedIn) {
             context.read<DiscoverCubit>().getAllCategories();
-            context.read<ProductCubit>().getPerCategory();
+            context.read<ProductCubit>().getAllProducts();
             return const HomePage();
           }
           return const LoginPage();
