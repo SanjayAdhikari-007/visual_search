@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:visual_search/core/theme/app_pallete.dart';
 import 'package:visual_search/features/discover/presentation/cubit/discover_cubit.dart';
 import 'package:visual_search/features/products/data/models/product_model.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import 'product_images.dart';
 
@@ -23,7 +26,8 @@ class ProductDetailPage extends StatelessWidget {
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(6)),
+                  color: AppPallete.buttonBlueColor,
+                  borderRadius: BorderRadius.circular(6)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,36 +40,68 @@ class ProductDetailPage extends StatelessWidget {
                         spacing: 5,
                         children: [
                           Text("\$${model.priceAfterDiscount}"),
-                          Text("\$${model.price}",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color!
-                                    .withValues(alpha: 0.6),
-                                fontSize: 14,
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color!
-                                    .withValues(alpha: 0.6),
-                                overflow: TextOverflow.ellipsis,
-                              )),
+                          if (model.discountRate != 0)
+                            Text("\$${model.price}",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color!
+                                      .withValues(alpha: 0.7),
+                                  fontSize: 14,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationColor: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color!
+                                      .withValues(alpha: 0.7),
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                         ],
                       ),
-                      Text("Unit Price"),
+                      Row(
+                        spacing: 5,
+                        children: [
+                          Text("Unit Price"),
+                          if (model.discountRate != 0)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPadding / 2),
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: AppPallete.gradient2,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(defaultBorderRadious)),
+                              ),
+                              child: Text(
+                                "${model.discountRate.toInt()}% off",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            )
+                        ],
+                      ),
                     ],
                   ),
                   InkWell(
                     onTap: () {
+                      Fluttertoast.showToast(
+                        msg: "${model.title} added to cart",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        backgroundColor: AppPallete.buttonBlueColor,
+                        textColor: Colors.black,
+                        fontSize: 16.0,
+                      );
                       context.read<CartCubit>().addItem(model);
                     },
                     child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                         decoration: BoxDecoration(
-                            color: Colors.lightBlue,
+                            color: const Color.fromARGB(255, 20, 96, 141),
                             borderRadius: BorderRadius.circular(6)),
                         child: Text("Add to Cart")),
                   )
@@ -76,7 +112,8 @@ class ProductDetailPage extends StatelessWidget {
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(6)),
+                  color: AppPallete.gradient2,
+                  borderRadius: BorderRadius.circular(6)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +150,7 @@ class ProductDetailPage extends StatelessWidget {
                     .copyWith(fontSize: 16),
               ),
               Row(
-                spacing: 20,
+                spacing: 15,
                 children: [
                   Text(
                     model.title,
@@ -122,7 +159,7 @@ class ProductDetailPage extends StatelessWidget {
                         .titleSmall!
                         .copyWith(fontSize: 18),
                   ),
-                  Text(" | "),
+                  Text("|"),
                   Text(
                     "${context.read<DiscoverCubit>().categoryFromId(model.category)?.name} ",
                     style: Theme.of(context)
@@ -130,6 +167,21 @@ class ProductDetailPage extends StatelessWidget {
                         .titleSmall!
                         .copyWith(fontSize: 18),
                   ),
+                  if (model.isFeatured)
+                    Row(
+                      spacing: 15,
+                      children: [
+                        Text("|"),
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: AppPallete.gradient2,
+                          ),
+                          child: Text("Featured"),
+                        ),
+                      ],
+                    )
                 ],
               ),
               Row(
@@ -140,7 +192,7 @@ class ProductDetailPage extends StatelessWidget {
                       padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.green,
+                        color: AppPallete.buttonBlueColor,
                       ),
                       child: Text("Available in Stock"),
                     ),
@@ -149,14 +201,22 @@ class ProductDetailPage extends StatelessWidget {
                       padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color: Colors.red,
+                        color: AppPallete.gradient2,
                       ),
                       child: Text("Out of Stock"),
                     ),
                 ],
               ),
+              if (model.pattern == "Solid")
+                Text(
+                  "Color: ${model.color}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontSize: 14),
+                ),
               Text(
-                "Color: ${model.color}",
+                "Pattern: ${model.pattern}",
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!

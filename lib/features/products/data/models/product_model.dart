@@ -3,20 +3,23 @@ import 'dart:convert';
 import '../../domain/entities/product.dart';
 
 class ProductModel extends Product {
-  ProductModel(
-      {required super.title,
-      required super.detail,
-      required super.id,
-      required super.createdAt,
-      required super.brandName,
-      required super.images,
-      required super.color,
-      required super.category,
-      required super.price,
-      required super.discountRate,
-      required super.priceAfterDiscount,
-      required super.rating,
-      required super.isInStock});
+  ProductModel({
+    required super.title,
+    required super.detail,
+    required super.id,
+    required super.createdAt,
+    required super.brandName,
+    required super.images,
+    required super.color,
+    required super.pattern,
+    required super.category,
+    required super.price,
+    required super.discountRate,
+    required super.priceAfterDiscount,
+    required super.rating,
+    required super.isInStock,
+    required super.isFeatured,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -26,6 +29,8 @@ class ProductModel extends Product {
       'brandName': brandName,
       'images': images,
       'color': color,
+      'pattern': pattern,
+      'isFeatured': isFeatured,
       'category': category,
       'price': price,
       'discountRate': discountRate,
@@ -44,6 +49,8 @@ class ProductModel extends Product {
       brandName: map['brandName'] as String,
       images: List<String>.from((map['images'] as List<dynamic>)),
       color: map['color'] as String,
+      pattern: map['pattern'] as String,
+      isFeatured: map['isFeatured'] as bool,
       category: map['category'] as String,
       price: double.parse(map['price'].toString()),
       discountRate: double.parse(map['discountRate'].toString()),

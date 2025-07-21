@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:visual_search/core/theme/app_pallete.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
@@ -150,32 +151,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+            backgroundColor: AppPallete.buttonBlueColor,
             child: BlocBuilder<ClassifierCubit, ClassifierState>(
-          builder: (context, state) {
-            if (state is ClassifierSuccess) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.search),
-                  Container(
-                    height: 25,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                        image: DecorationImage(
-                          image: FileImage(state.imageFile),
-                          fit: BoxFit.cover,
-                        )),
-                  ),
-                ],
-              );
-            }
-            return Icon(Icons.search);
-          },
-        ), onPressed: () {
-          showVisualSearchDialog(context);
-        }),
+              builder: (context, state) {
+                if (state is ClassifierSuccess) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(Icons.search),
+                      Container(
+                        height: 25,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            image: DecorationImage(
+                              image: FileImage(state.imageFile),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                    ],
+                  );
+                }
+                return Icon(Icons.search);
+              },
+            ),
+            onPressed: () {
+              showVisualSearchDialog(context);
+            }),
       ),
     );
   }

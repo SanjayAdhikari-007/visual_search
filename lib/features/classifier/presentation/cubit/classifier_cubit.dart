@@ -31,8 +31,8 @@ class ClassifierCubit extends Cubit<ClassifierState> {
         _isInitialized = true;
       }
 
-      final (p1, p2) = await _repository.classify(imageFile);
-      emit(ClassifierSuccess(imageFile: imageFile, predictions: (p1, p2)));
+      final (p1, p2, p3) = await _repository.classify(imageFile);
+      emit(ClassifierSuccess(imageFile: imageFile, predictions: (p1, p2, p3)));
     } catch (e) {
       emit(ClassifierError('Classification failed: $e'));
     }

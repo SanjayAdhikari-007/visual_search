@@ -7,29 +7,30 @@ import '../../data/models/product_model.dart';
 part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
-  List<ProductModel> popProducts = [];
   List<ProductModel> extraProducts = [];
+  List<ProductModel> featured = [];
+  List<ProductModel> popularProducts = [];
   final ProductRepository repository;
   ProductCubit(this.repository) : super(ProductInitial());
 
-  void getAllProducts() async {
+  // void getAllProducts() async {
+  //   emit(ProductLoading());
+  //   if (popProducts.isEmpty) {
+  //     final List<ProductModel> results = await repository.getAllProducts();
+  //     popProducts = results.getRange(0, 8).toList();
+  //     extraProducts = results.getRange(8, results.length - 1).toList();
+  //   }
+  //   emit(ProductData(popProducts));
+  // }
+
+  void getProducts() async {
     emit(ProductLoading());
-    if (popProducts.isEmpty) {
+    if (popularProducts.isEmpty) {
+      featured = await repository.getFeatured();
       final List<ProductModel> results = await repository.getAllProducts();
-      popProducts = results.getRange(0, 8).toList();
-      extraProducts = results.getRange(8, results.length - 1).toList();
+      popularProducts = results.getRange(0, 8).toList();
     }
-
-    emit(ProductData(popProducts));
-  }
-
-  void getPerCategory() async {
-    emit(ProductLoading());
-    if (popProducts.isEmpty) {
-      final List<ProductModel> results = await repository.getPerCategory();
-      popProducts = results;
-    }
-    emit(ProductData(popProducts));
+    emit(ProductData(popularProducts));
   }
 
   void getAllProductsByCategory(String categoryId) async {
@@ -56,6 +57,24 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     final List<ProductModel> results =
         await repository.visualSearchByName(categoryName, color);
-    emit(ProductVisualData(results));
+    Future.delayed(
+      Duration(milliseconds: 350),
+      () {
+        emit(ProductVisualData(results));
+      },
+    );
+  }
+
+  void visualSearchByCategoryAndPattern(
+      String categoryName, String pattern) async {
+    emit(ProductLoading());
+    final List<ProductModel> results = await repository
+        .visualSearchByCategoryAndPattern(categoryName, pattern);
+    Future.delayed(
+      Duration(milliseconds: 350),
+      () {
+        emit(ProductVisualData(results));
+      },
+    );
   }
 }

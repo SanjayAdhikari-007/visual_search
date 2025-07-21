@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:visual_search/core/common/color_print/color_print.dart';
 import 'package:visual_search/core/db/local_db.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -9,12 +10,16 @@ import 'package:http/http.dart' as http;
 
 abstract interface class ProductDataSource {
   Future<List<ProductModel>> getAllProducts();
+  Future<List<ProductModel>> getTwoPerCategory();
+  Future<List<ProductModel>> getFeatured();
   Future<List<ProductModel>> getPerCategory();
   Future<List<ProductModel>> getAllProductsByCategory(String categoryId);
   Future<ProductModel> getSingleProduct(String id);
   Future<List<ProductModel>> visualSearchById(String categoryId, String color);
   Future<List<ProductModel>> visualSearchByName(
       String categoryName, String color);
+  Future<List<ProductModel>> visualSearchByCategoryAndPattern(
+      String categoryName, String pattern);
 }
 
 class ProductDataSourceImpl implements ProductDataSource {
@@ -49,11 +54,41 @@ class ProductDataSourceImpl implements ProductDataSource {
   }
 
   @override
-  Future<List<ProductModel>> getPerCategory() async {
+  Future<List<ProductModel>> getFeatured() async {
+    var client = http.Client();
+    String? token = await LocalDb().getToken();
+    var response = await client
+        .get(Uri.parse("${Constants.baseApiUrl}/products/featured"), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 404 ||
+        response.statusCode == 401 ||
+        response.statusCode == 500) {
+      throw ServerException(
+          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    }
+
+    var arr = jsonDecode(response.body) as List<dynamic>;
+
+    List<ProductModel> results = [];
+
+    for (Map<String, dynamic> product in arr) {
+      ProductModel model = ProductModel.fromJson(jsonEncode(product));
+      results.add(model);
+    }
+
+    return results;
+  }
+
+  @override
+  Future<List<ProductModel>> getTwoPerCategory() async {
     var client = http.Client();
     String? token = await LocalDb().getToken();
     var response = await client.get(
-        Uri.parse("${Constants.baseApiUrl}/products/percategory"),
+        Uri.parse("${Constants.baseApiUrl}/products/twopercategory"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -68,6 +103,38 @@ class ProductDataSourceImpl implements ProductDataSource {
     }
 
     var arr = jsonDecode(response.body) as List<dynamic>;
+
+    List<ProductModel> results = [];
+
+    for (Map<String, dynamic> product in arr) {
+      ProductModel model = ProductModel.fromJson(jsonEncode(product));
+      results.add(model);
+    }
+
+    return results;
+  }
+
+  @override
+  Future<List<ProductModel>> getPerCategory() async {
+    var client = http.Client();
+    String? token = await LocalDb().getToken();
+    var response = await client.get(
+        Uri.parse("${Constants.baseApiUrl}/products/twopercategory"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
+
+    if (response.statusCode == 404 ||
+        response.statusCode == 401 ||
+        response.statusCode == 500) {
+      throw ServerException(
+          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    }
+
+    var arr = jsonDecode(response.body) as List<dynamic>;
+    printR(arr.toString());
     List<ProductModel> results = [];
 
     for (Map<String, dynamic> product in arr) {
@@ -174,7 +241,42 @@ class ProductDataSourceImpl implements ProductDataSource {
     String? token = await LocalDb().getToken();
     var response = await client.get(
         Uri.parse(
-            "${Constants.baseApiUrl}/products/visual_search/$categoryName?color=$color"),
+            "${Constants.baseApiUrl}/products/vscc/$categoryName?color=$color"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
+
+    if (response.statusCode == 404 ||
+        response.statusCode == 401 ||
+        response.statusCode == 500) {
+      throw ServerException(
+          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    }
+
+    var arr = jsonDecode(response.body) as List<dynamic>;
+
+    List<ProductModel> results = [];
+
+    for (Map<String, dynamic> product in arr) {
+      ProductModel model = ProductModel.fromJson(jsonEncode(product));
+      results.add(model);
+    }
+
+    return results;
+  }
+
+  @override
+  Future<List<ProductModel>> visualSearchByCategoryAndPattern(
+    String categoryName,
+    String pattern,
+  ) async {
+    var client = http.Client();
+    String? token = await LocalDb().getToken();
+    var response = await client.get(
+        Uri.parse(
+            "${Constants.baseApiUrl}/products/vscp/$categoryName?pattern=$pattern"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

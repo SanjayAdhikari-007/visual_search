@@ -62,6 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
             return Form(
               key: formKey,
               child: Column(
+                spacing: 15,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
@@ -71,7 +72,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 30),
                   AuthField(
                       icon: "assets/icons/Profile.svg",
                       hintText: 'Name',
@@ -83,7 +83,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
                         return null;
                       }),
-                  const SizedBox(height: 15),
                   AuthField(
                       icon: "assets/icons/Message.svg",
                       hintText: 'Email',
@@ -99,7 +98,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       }),
-                  const SizedBox(height: 15),
                   AuthField(
                     icon: "assets/icons/Lock.svg",
                     hintText: 'Password',
@@ -115,7 +113,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
                   AuthGradientButton(
                     buttonText: 'Sign Up',
                     onPressed: () {
@@ -130,7 +127,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       }
                     },
                   ),
-                  const SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(context, LoginPage.route());

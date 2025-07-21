@@ -1,0 +1,4 @@
+0 Solid
+1 Striped
+2 Floral
+3 Graphics

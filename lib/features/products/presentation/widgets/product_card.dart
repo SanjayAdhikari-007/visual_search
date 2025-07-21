@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visual_search/core/theme/app_pallete.dart';
 import 'package:visual_search/features/products/data/models/product_model.dart';
 
 import '../../../../core/constants/constants.dart';
@@ -16,7 +17,7 @@ class ProductCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: Colors.white30,
+          color: AppPallete.borderColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -29,7 +30,7 @@ class ProductCard extends StatelessWidget {
                   height: 100,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24,
+                      color: AppPallete.subBgColor,
                       image: DecorationImage(
                           fit: BoxFit.contain,
                           image: NetworkImage(model.images[0]))),
@@ -42,8 +43,8 @@ class ProductCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: defaultPadding / 2),
                       height: 16,
-                      decoration: const BoxDecoration(
-                        color: errorColor,
+                      decoration: BoxDecoration(
+                        color: AppPallete.gradient2,
                         borderRadius: BorderRadius.all(
                             Radius.circular(defaultBorderRadious)),
                       ),

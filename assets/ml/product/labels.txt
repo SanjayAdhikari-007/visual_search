@@ -1,7 +1,0 @@
-0 Bottle
-1 Mobile
-2 Watch
-3 Iron
-4 RubiksCube
-5 Laptop
-6 Car

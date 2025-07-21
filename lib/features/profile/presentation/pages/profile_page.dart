@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visual_search/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:visual_search/core/theme/app_pallete.dart';
 import 'package:visual_search/features/auth/presentation/pages/login_page.dart';
 
 import '../../../auth/presentation/bloc/auth_bloc.dart';
@@ -65,15 +66,59 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   TextButton(
                       onPressed: () {
-                        context.read<AuthBloc>().add(
-                              AuthLogOut(),
-                            );
-                        setState(() {});
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            actions: [
+                              TextButton(
+                                child: Text("Cancel",
+                                    style: TextStyle(
+                                      color: AppPallete.buttonBlueColor,
+                                    )),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.logout,
+                                      color: AppPallete.buttonBlueColor,
+                                    ),
+                                    Text(
+                                      " Logout",
+                                      style: TextStyle(
+                                        color: AppPallete.buttonBlueColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  context.read<AuthBloc>().add(
+                                        AuthLogOut(),
+                                      );
+                                  setState(() {});
+                                },
+                              )
+                            ],
+                            content: Text("Are you sure you want to logout ?"),
+                          ),
+                        );
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.logout),
-                          Text(" Logout"),
+                          Icon(
+                            Icons.logout,
+                            color: AppPallete.buttonBlueColor,
+                          ),
+                          Text(
+                            " Logout",
+                            style: TextStyle(
+                              color: AppPallete.buttonBlueColor,
+                            ),
+                          ),
                         ],
                       )),
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/theme/app_pallete.dart';
@@ -40,7 +41,14 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthFailure) {
-              showSnackBar(context, state.message);
+              Fluttertoast.showToast(
+                msg: state.message,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.SNACKBAR,
+                backgroundColor: AppPallete.gradient2,
+                textColor: Colors.black,
+                fontSize: 16.0,
+              );
             } else if (state is AuthSuccess) {
               Navigator.pushAndRemoveUntil(
                 context,
@@ -51,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           },
           builder: (context, state) {
             if (state is AuthLoading) {
-              return const Loader();
+              return const AuthLoader();
             }
 
             return Form(
@@ -111,11 +119,6 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             );
                       }
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   HomePage.route(),
-                      //   (route) => false,
-                      // );
                     },
                   ),
                   const SizedBox(height: 20),

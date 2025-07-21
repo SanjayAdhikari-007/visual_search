@@ -10,24 +10,31 @@ import '../model/prediction.dart';
 class MultiModelClassifierRepository {
   late Interpreter _interpreter1;
   late Interpreter _interpreter2;
+  late Interpreter _interpreter3;
 
   late List<String> _labels1;
   late List<String> _labels2;
+  late List<String> _labels3;
 
   final int inputSize = 224;
 
   Future<void> loadModels() async {
     _interpreter1 =
-        await Interpreter.fromAsset('assets/ml/product/model.tflite');
+        await Interpreter.fromAsset('assets/ml/category/model.tflite');
     _interpreter2 = await Interpreter.fromAsset('assets/ml/color/model.tflite');
+    _interpreter3 =
+        await Interpreter.fromAsset('assets/ml/pattern/model.tflite');
 
-    _labels1 = (await rootBundle.loadString('assets/ml/product/labels.txt'))
+    _labels1 = (await rootBundle.loadString('assets/ml/category/labels.txt'))
         .split('\n');
     _labels2 =
         (await rootBundle.loadString('assets/ml/color/labels.txt')).split('\n');
+    _labels3 = (await rootBundle.loadString('assets/ml/pattern/labels.txt'))
+        .split('\n');
   }
 
-  Future<(Prediction, Prediction)> classify(File imageFile) async {
+  /// Outputs Category, Color, Pattern
+  Future<(Prediction, Prediction, Prediction)> classify(File imageFile) async {
     final image = img.decodeImage(await imageFile.readAsBytes());
     if (image == null) throw Exception('Failed to decode image');
     final resized = img.copyResize(image, width: inputSize, height: inputSize);
@@ -45,8 +52,9 @@ class MultiModelClassifierRepository {
 
     final top1 = _runModel(_interpreter1, _labels1, input);
     final top2 = _runModel(_interpreter2, _labels2, input);
+    final top3 = _runModel(_interpreter3, _labels3, input);
 
-    return (top1, top2);
+    return (top1, top2, top3);
   }
 
   Prediction _runModel(
@@ -72,5 +80,6 @@ class MultiModelClassifierRepository {
   void dispose() {
     _interpreter1.close();
     _interpreter2.close();
+    _interpreter3.close();
   }
 }

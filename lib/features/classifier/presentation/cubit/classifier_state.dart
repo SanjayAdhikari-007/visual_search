@@ -15,7 +15,7 @@ class ClassifierLoading extends ClassifierState {}
 
 class ClassifierSuccess extends ClassifierState {
   final File imageFile;
-  final (Prediction, Prediction) predictions;
+  final (Prediction, Prediction, Prediction) predictions;
 
   const ClassifierSuccess({required this.imageFile, required this.predictions});
 

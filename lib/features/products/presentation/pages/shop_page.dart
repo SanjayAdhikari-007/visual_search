@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:visual_search/core/theme/app_pallete.dart';
 import 'package:visual_search/features/products/presentation/cubit/product_cubit.dart';
 import 'package:visual_search/features/products/presentation/widgets/product_card.dart';
 import '../../../../core/constants/constants.dart';
@@ -18,7 +20,7 @@ class _ShopPageState extends State<ShopPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<ProductCubit>().getAllProducts();
+    context.read<ProductCubit>().getProducts();
   }
 
   @override
@@ -37,7 +39,7 @@ class _ShopPageState extends State<ShopPage> {
               BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
                   if (state is ProductData) {
-                    final products = context.read<ProductCubit>().extraProducts;
+                    final products = context.read<ProductCubit>().featured;
 
                     return CarouselSlider.builder(
                       itemCount: products.length,
@@ -88,8 +90,8 @@ class _ShopPageState extends State<ShopPage> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: defaultPadding / 2),
                                         height: 16,
-                                        decoration: const BoxDecoration(
-                                          color: errorColor,
+                                        decoration: BoxDecoration(
+                                          color: AppPallete.gradient2,
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(
                                                   defaultBorderRadious)),
@@ -124,42 +126,46 @@ class _ShopPageState extends State<ShopPage> {
                           child: Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                            color: Colors.white30,
+                            color: AppPallete.borderColor,
                             borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           spacing: 7,
                           children: [
                             Container(
-                              height: 100,
+                              width: 120,
+                              height: 120,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white24,
+                                borderRadius: BorderRadius.circular(20),
+                                color: AppPallete.subBgColor,
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/icons/Image.svg",
+                                color: AppPallete.borderColor,
                               ),
                             ),
-                            Container(
-                              width: 100,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.white24,
-                              ),
-                            ),
-                            Container(
-                              width: 60,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.white24,
-                              ),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.white24,
-                              ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 5,
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: AppPallete.subBgColor,
+                                  ),
+                                ),
+                                Container(
+                                  width: 70,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: AppPallete.subBgColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -219,17 +225,22 @@ class _ShopPageState extends State<ShopPage> {
                             return Container(
                               padding: EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                  color: Colors.white30,
+                                  color: AppPallete.borderColor,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 spacing: 7,
                                 children: [
                                   Container(
+                                    width: 120,
                                     height: 100,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white24,
+                                      color: AppPallete.subBgColor,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      "assets/icons/Image.svg",
+                                      color: AppPallete.borderColor,
                                     ),
                                   ),
                                   Container(
@@ -237,7 +248,7 @@ class _ShopPageState extends State<ShopPage> {
                                     height: 12,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
-                                      color: Colors.white24,
+                                      color: AppPallete.subBgColor,
                                     ),
                                   ),
                                   Container(
@@ -245,7 +256,7 @@ class _ShopPageState extends State<ShopPage> {
                                     height: 12,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
-                                      color: Colors.white24,
+                                      color: AppPallete.subBgColor,
                                     ),
                                   ),
                                   Container(
@@ -253,7 +264,7 @@ class _ShopPageState extends State<ShopPage> {
                                     height: 12,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
-                                      color: Colors.white24,
+                                      color: AppPallete.subBgColor,
                                     ),
                                   ),
                                 ],

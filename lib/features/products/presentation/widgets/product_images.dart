@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/constants.dart';
+import '../../../../core/theme/app_pallete.dart';
 
 class ProductImages extends StatefulWidget {
   const ProductImages({
@@ -62,7 +63,7 @@ class _ProductImagesState extends State<ProductImages> {
                       imageBuilder: (context, imageProvider) => Container(
                         // height: 400,
                         decoration: BoxDecoration(
-                          color: Colors.white24,
+                          color: AppPallete.borderColor,
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
                             image: imageProvider,

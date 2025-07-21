@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:visual_search/features/cart/presentation/bloc/cart_bloc.dart';
 
+import '../../../../core/theme/app_pallete.dart';
 import '../../../products/presentation/widgets/product_card.dart';
 import '../../../products/presentation/widgets/product_detail_page.dart';
 
@@ -47,6 +49,14 @@ class CartPage extends StatelessWidget {
                           children: [
                             IconButton(
                                 onPressed: () {
+                                  Fluttertoast.showToast(
+                                    msg: "${model.title} removed from cart",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP,
+                                    backgroundColor: AppPallete.buttonBlueColor,
+                                    textColor: Colors.black,
+                                    fontSize: 16.0,
+                                  );
                                   context
                                       .read<CartCubit>()
                                       .removeSingleItem(model.id);

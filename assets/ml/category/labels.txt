@@ -1,0 +1,5 @@
+0 Tshirt
+1 Jeans
+2 Skirt
+3 Jacket
+4 Trousers

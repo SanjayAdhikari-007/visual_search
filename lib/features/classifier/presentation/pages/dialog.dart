@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:visual_search/core/common/widgets/dialog_loader.dart';
 import 'package:visual_search/features/classifier/presentation/pages/visual_search_page.dart';
+import '../../../../core/theme/app_pallete.dart';
 import '../../../products/presentation/cubit/product_cubit.dart';
 import '../cubit/classifier_cubit.dart';
 import '../cubit/classifier_state.dart';
@@ -33,10 +36,15 @@ void showVisualSearchDialog(
           actions: [
             TextButton(
                 onPressed: () {
-                  context.read<ProductCubit>().getPerCategory();
+                  context.read<ProductCubit>().getProducts();
                   Navigator.of(context).pop();
                 },
-                child: Text("Cancel")),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(
+                    color: AppPallete.buttonBlueColor,
+                  ),
+                )),
             BlocBuilder<ClassifierCubit, ClassifierState>(
               builder: (context, state) {
                 if (state is ClassifierSuccess) {
@@ -47,10 +55,14 @@ void showVisualSearchDialog(
                             categoryName:
                                 state.predictions.$1.label.split(" ").last,
                             color: state.predictions.$2.label.split(" ").last,
+                            pattern: state.predictions.$3.label.split(" ").last,
                           ),
                         ));
                       },
-                      child: Text("Search"));
+                      child: Text("Search",
+                          style: TextStyle(
+                            color: AppPallete.buttonBlueColor,
+                          )));
                 }
                 return TextButton(onPressed: null, child: Text("Search"));
               },
@@ -90,15 +102,16 @@ void showVisualSearchDialog(
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Icon(
                                   Icons.cancel,
-                                  color: Colors.red,
+                                  color: AppPallete.buttonBlueColor,
                                   size: 33,
                                 ),
                               )),
                         )
                       ],
                     ),
-                    Text(state.predictions.$1.label.split(" ").last),
-                    Text(state.predictions.$2.label.split(" ").last),
+                    // Text(state.predictions.$1.label.split(" ").last),
+                    // Text(state.predictions.$2.label.split(" ").last),
+                    // Text(state.predictions.$3.label.split(" ").last),
                   ],
                 );
               } else if (state is ClassifierError) {
@@ -119,7 +132,7 @@ void showVisualSearchDialog(
                     }
                   },
                   child: DottedBorder(
-                    color: Colors.white,
+                    color: AppPallete.buttonBlueColor,
                     borderType: BorderType.RRect,
                     strokeWidth: 2,
                     radius: Radius.circular(5),
@@ -127,17 +140,21 @@ void showVisualSearchDialog(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          color: Colors.white10,
+                          color: AppPallete.borderColor,
                           borderRadius: BorderRadius.circular(5)),
                       child: Row(
                         spacing: 5,
                         children: [
-                          Icon(Icons.image),
+                          SvgPicture.asset(
+                            "assets/icons/Image.svg",
+                            height: 24,
+                            color: AppPallete.buttonBlueColor,
+                          ),
                           Text(
                             'Select Image',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                                fontWeight: FontWeight.bold,
+                                color: AppPallete.buttonBlueColor),
                           ),
                         ],
                       ),

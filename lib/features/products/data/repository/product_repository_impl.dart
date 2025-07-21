@@ -20,6 +20,17 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
+  Future<List<ProductModel>> getTwoPerCategory() async {
+    try {
+      final list = await source.getTwoPerCategory();
+      return list;
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
   Future<List<ProductModel>> getPerCategory() async {
     try {
       final list = await source.getPerCategory();
@@ -74,6 +85,41 @@ class ProductRepositoryImpl implements ProductRepository {
       return list;
     } catch (e) {
       debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> visualSearchByCategory(String categoryName) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ProductModel>> visualSearchByCategoryAndPattern(
+      String categoryName, String pattern) async {
+    try {
+      final list =
+          await source.visualSearchByCategoryAndPattern(categoryName, pattern);
+      return list;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> visualSearchByCategoryAndPatternAndColor(
+      String categoryNamem, String pattern, String color) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ProductModel>> getFeatured() async {
+    try {
+      final list = await source.getFeatured();
+      return list;
+    } catch (e) {
+      print(e.toString());
       rethrow;
     }
   }
