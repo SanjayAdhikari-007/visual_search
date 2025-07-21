@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/theme/app_pallete.dart';
-import '../../../../core/utils/show_snackbar.dart';
 import '../../../home/presentation/pages/home_page.dart';
 import '../bloc/auth_bloc.dart';
 import '../widgets/auth_field.dart';

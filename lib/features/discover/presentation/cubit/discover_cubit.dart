@@ -12,9 +12,12 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   DiscoverCubit(this.repository) : super(DiscoverInitial());
 
   void getAllCategories() async {
-    final results = await repository.getAllCategories();
-    categories = results;
-    emit(DiscoverData(results));
+    if (categories.isEmpty) {
+      final results = await repository.getAllCategories();
+      categories = results;
+    }
+
+    emit(DiscoverData(categories));
   }
 
   void getSingleCategory(String id) async {

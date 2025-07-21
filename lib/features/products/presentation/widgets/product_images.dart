@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/theme/app_pallete.dart';
 
@@ -71,7 +72,14 @@ class _ProductImagesState extends State<ProductImages> {
                           ),
                         ),
                       ),
-                      placeholder: (context, url) => const Icon(Icons.image),
+                      placeholder: (context, url) => Center(
+                        child: SvgPicture.asset(
+                          "assets/icons/Image.svg",
+                          color: Colors.white30,
+                          fit: BoxFit.fitHeight,
+                          height: 60,
+                        ),
+                      ),
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
                     ),

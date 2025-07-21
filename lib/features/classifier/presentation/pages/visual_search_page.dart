@@ -1,9 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:visual_search/core/common/color_print/color_print.dart';
 import 'package:visual_search/features/classifier/presentation/cubit/classifier_cubit.dart';
 import 'package:visual_search/features/products/presentation/cubit/product_cubit.dart';
 

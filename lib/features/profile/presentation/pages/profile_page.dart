@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visual_search/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:visual_search/core/theme/app_pallete.dart';
 import 'package:visual_search/features/auth/presentation/pages/login_page.dart';
+import 'package:visual_search/features/classifier/presentation/cubit/classifier_cubit.dart';
 
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 
@@ -96,6 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ],
                                 ),
                                 onPressed: () {
+                                  context.read<ClassifierCubit>().removeImage();
                                   context.read<AuthBloc>().add(
                                         AuthLogOut(),
                                       );

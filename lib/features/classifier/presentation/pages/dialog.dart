@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:visual_search/core/common/widgets/dialog_loader.dart';
 import 'package:visual_search/features/classifier/presentation/pages/visual_search_page.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../products/presentation/cubit/product_cubit.dart';

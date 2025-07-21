@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:visual_search/core/common/widgets/loader.dart';
 
 import '../../../../core/common/widgets/flickering_opacity.dart';
 import '../../../products/presentation/pages/products_list.dart';

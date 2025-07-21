@@ -9,6 +9,8 @@ import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../classifier/presentation/cubit/classifier_cubit.dart';
 import '../../../classifier/presentation/cubit/classifier_state.dart';
 import '../../../classifier/presentation/pages/dialog.dart';
+import '../../../discover/presentation/cubit/discover_cubit.dart';
+import '../../../products/presentation/cubit/product_cubit.dart';
 import '../components/pages.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,13 +27,10 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   @override
-  void initState() {
-    super.initState();
-    context.read<ClassifierCubit>().initialize();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<DiscoverCubit>().getAllCategories();
+    context.read<ProductCubit>().getProducts();
+    context.read<ClassifierCubit>().initialize();
     SvgPicture svgIcon(String src, {Color? color}) {
       return SvgPicture.asset(
         src,
