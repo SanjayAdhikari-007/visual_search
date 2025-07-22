@@ -95,7 +95,7 @@ void showVisualSearchDialog(
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => VisualSearchPage(
                             categoryName: categoryDropdownValue,
-                            color: colorDropdownValue,
+                            color: colorDropdownValue.trim(),
                             pattern: patternDropdownValue,
                           ),
                         ));
