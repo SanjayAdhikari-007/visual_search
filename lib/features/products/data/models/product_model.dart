@@ -19,6 +19,7 @@ class ProductModel extends Product {
     required super.rating,
     required super.isInStock,
     required super.isFeatured,
+    required super.isPopular,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +32,7 @@ class ProductModel extends Product {
       'color': color,
       'pattern': pattern,
       'isFeatured': isFeatured,
+      'isPopular': isPopular,
       'category': category,
       'price': price,
       'discountRate': discountRate,
@@ -51,6 +53,7 @@ class ProductModel extends Product {
       color: map['color'] as String,
       pattern: map['pattern'] as String,
       isFeatured: map['isFeatured'] as bool,
+      isPopular: map['isPopular'] as bool,
       category: map['category'] as String,
       price: double.parse(map['price'].toString()),
       discountRate: double.parse(map['discountRate'].toString()),

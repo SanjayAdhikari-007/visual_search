@@ -13,6 +13,7 @@ class Product {
   final double rating;
   final bool isInStock;
   final bool isFeatured;
+  final bool isPopular;
   final String createdAt;
 
   Product({
@@ -31,5 +32,6 @@ class Product {
     required this.rating,
     required this.isInStock,
     required this.isFeatured,
+    required this.isPopular,
   });
 }

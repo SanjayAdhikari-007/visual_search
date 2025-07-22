@@ -42,4 +42,9 @@ class ClassifierCubit extends Cubit<ClassifierState> {
     filePath = "";
     emit(ClassifierInitial());
   }
+
+  void textSearch() {
+    filePath = "none";
+    emit(ClassifierTextSearch());
+  }
 }

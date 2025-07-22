@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:visual_search/features/classifier/presentation/cubit/classifier_cubit.dart';
 import 'package:visual_search/features/products/presentation/cubit/product_cubit.dart';
@@ -31,9 +32,8 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
   void initState() {
     super.initState();
     if (widget.pattern == "Solid") {
-      context
-          .read<ProductCubit>()
-          .visualSearchByName(widget.categoryName, widget.color);
+      context.read<ProductCubit>().visualSearchByCategoryAndPatternAndColor(
+          widget.categoryName, widget.pattern, widget.color);
     } else {
       context.read<ProductCubit>().visualSearchByCategoryAndPattern(
           widget.categoryName, widget.pattern);
@@ -73,11 +73,23 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
                             borderRadius: BorderRadius.circular(5)),
                         child: Image.file(
                           state.imageFile,
-                          height: 60,
+                          height: 80,
                         ),
                       );
                     }
-                    return Container();
+
+                    return Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration:
+                          BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                      child: SvgPicture.asset(
+                        "assets/icons/Image.svg",
+                        color: AppPallete.subBgColor,
+                        height: 60,
+                      ),
+                    );
+
+                    // return Container();
                   },
                 ),
                 Column(

@@ -27,8 +27,7 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     if (popularProducts.isEmpty) {
       featured = await repository.getFeatured();
-      final List<ProductModel> results = await repository.getAllProducts();
-      popularProducts = results.getRange(0, 8).toList();
+      popularProducts = await repository.getPopular();
     }
     emit(ProductData(popularProducts));
   }
@@ -70,6 +69,22 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     final List<ProductModel> results = await repository
         .visualSearchByCategoryAndPattern(categoryName, pattern);
+    Future.delayed(
+      Duration(milliseconds: 350),
+      () {
+        emit(ProductVisualData(results));
+      },
+    );
+  }
+
+  void visualSearchByCategoryAndPatternAndColor(
+    String categoryName,
+    String pattern,
+    String color,
+  ) async {
+    emit(ProductLoading());
+    final List<ProductModel> results = await repository
+        .visualSearchByCategoryAndPatternAndColor(categoryName, pattern, color);
     Future.delayed(
       Duration(milliseconds: 350),
       () {

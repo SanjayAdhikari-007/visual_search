@@ -109,14 +109,32 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<List<ProductModel>> visualSearchByCategoryAndPatternAndColor(
-      String categoryNamem, String pattern, String color) {
-    throw UnimplementedError();
+      String categoryName, String pattern, String color) async {
+    try {
+      final list = await source.visualSearchByCategoryAndPatternAndColor(
+          categoryName, pattern, color);
+      return list;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   @override
   Future<List<ProductModel>> getFeatured() async {
     try {
       final list = await source.getFeatured();
+      return list;
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getPopular() async {
+    try {
+      final list = await source.getPopular();
       return list;
     } catch (e) {
       print(e.toString());

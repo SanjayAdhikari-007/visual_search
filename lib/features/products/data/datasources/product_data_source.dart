@@ -12,6 +12,7 @@ abstract interface class ProductDataSource {
   Future<List<ProductModel>> getAllProducts();
   Future<List<ProductModel>> getTwoPerCategory();
   Future<List<ProductModel>> getFeatured();
+  Future<List<ProductModel>> getPopular();
   Future<List<ProductModel>> getPerCategory();
   Future<List<ProductModel>> getAllProductsByCategory(String categoryId);
   Future<ProductModel> getSingleProduct(String id);
@@ -20,6 +21,8 @@ abstract interface class ProductDataSource {
       String categoryName, String color);
   Future<List<ProductModel>> visualSearchByCategoryAndPattern(
       String categoryName, String pattern);
+  Future<List<ProductModel>> visualSearchByCategoryAndPatternAndColor(
+      String categoryName, String pattern, String color);
 }
 
 class ProductDataSourceImpl implements ProductDataSource {
@@ -59,6 +62,36 @@ class ProductDataSourceImpl implements ProductDataSource {
     String? token = await LocalDb().getToken();
     var response = await client
         .get(Uri.parse("${Constants.baseApiUrl}/products/featured"), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 404 ||
+        response.statusCode == 401 ||
+        response.statusCode == 500) {
+      throw ServerException(
+          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    }
+
+    var arr = jsonDecode(response.body) as List<dynamic>;
+
+    List<ProductModel> results = [];
+
+    for (Map<String, dynamic> product in arr) {
+      ProductModel model = ProductModel.fromJson(jsonEncode(product));
+      results.add(model);
+    }
+
+    return results;
+  }
+
+  @override
+  Future<List<ProductModel>> getPopular() async {
+    var client = http.Client();
+    String? token = await LocalDb().getToken();
+    var response = await client
+        .get(Uri.parse("${Constants.baseApiUrl}/products/popular"), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
@@ -277,6 +310,42 @@ class ProductDataSourceImpl implements ProductDataSource {
     var response = await client.get(
         Uri.parse(
             "${Constants.baseApiUrl}/products/vscp/$categoryName?pattern=$pattern"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        });
+
+    if (response.statusCode == 404 ||
+        response.statusCode == 401 ||
+        response.statusCode == 500) {
+      throw ServerException(
+          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    }
+
+    var arr = jsonDecode(response.body) as List<dynamic>;
+
+    List<ProductModel> results = [];
+
+    for (Map<String, dynamic> product in arr) {
+      ProductModel model = ProductModel.fromJson(jsonEncode(product));
+      results.add(model);
+    }
+
+    return results;
+  }
+
+  @override
+  Future<List<ProductModel>> visualSearchByCategoryAndPatternAndColor(
+    String categoryName,
+    String pattern,
+    String color,
+  ) async {
+    var client = http.Client();
+    String? token = await LocalDb().getToken();
+    var response = await client.get(
+        Uri.parse(
+            "${Constants.baseApiUrl}/products/visual_search/$categoryName?pattern=$pattern&color=$color"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

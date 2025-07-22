@@ -13,6 +13,8 @@ class ClassifierInitial extends ClassifierState {}
 
 class ClassifierLoading extends ClassifierState {}
 
+class ClassifierTextSearch extends ClassifierState {}
+
 class ClassifierSuccess extends ClassifierState {
   final File imageFile;
   final (Prediction, Prediction, Prediction) predictions;

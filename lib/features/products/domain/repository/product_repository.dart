@@ -3,6 +3,7 @@ import '../../data/models/product_model.dart';
 abstract interface class ProductRepository {
   Future<List<ProductModel>> getAllProducts();
   Future<List<ProductModel>> getFeatured();
+  Future<List<ProductModel>> getPopular();
   Future<List<ProductModel>> getPerCategory();
   Future<List<ProductModel>> getTwoPerCategory();
   Future<List<ProductModel>> getAllProductsByCategory(String categoryId);
