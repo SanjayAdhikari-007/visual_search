@@ -26,7 +26,7 @@ class AppTheme {
       border: _border(),
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.gradient2),
-      errorBorder: _border(AppPallete.errorColor),
+      errorBorder: _border(Colors.red),
     ),
   );
 }

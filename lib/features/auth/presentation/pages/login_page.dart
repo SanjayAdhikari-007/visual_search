@@ -63,88 +63,99 @@ class _LoginPageState extends State<LoginPage> {
 
             return Form(
               key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sign In.',
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  AuthField(
-                    icon: "assets/icons/Message.svg",
-                    hintText: 'Email',
-                    controller: emailController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Email is missing!";
-                      }
-                      if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(value)) {
-                        return "Email is invalid!";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  AuthField(
-                    icon: "assets/icons/Lock.svg",
-                    hintText: 'Password',
-                    controller: passwordController,
-                    isObscureText: true,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Password is missing!";
-                      }
-                      if (value.length < 6) {
-                        return "Password should be at least 6 characters long";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  AuthGradientButton(
-                    buttonText: 'Sign in',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(
-                              AuthLogin(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              ),
-                            );
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, SignUpPage.route());
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Don\'t have an account? ',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        children: [
-                          TextSpan(
-                            text: 'Sign Up',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: AppPallete.gradient2,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/logo.png",
+                        height: 100,
+                        fit: BoxFit.fitHeight,
                       ),
-                    ),
+                      Text(
+                        "Visual Search",
+                        style: TextStyle(
+                          color: AppPallete.buttonBlueColor,
+                          fontFamily: "Grandis Extended",
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      AuthField(
+                        icon: "assets/icons/Message.svg",
+                        hintText: 'Email',
+                        controller: emailController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Email is missing!";
+                          }
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
+                            return "Email is invalid!";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      AuthField(
+                        icon: "assets/icons/Lock.svg",
+                        hintText: 'Password',
+                        controller: passwordController,
+                        isObscureText: true,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Password is missing!";
+                          }
+                          if (value.length < 6) {
+                            return "Password should be at least 6 characters long";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      AuthGradientButton(
+                        buttonText: 'Sign in',
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<AuthBloc>().add(
+                                  AuthLogin(
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                  ),
+                                );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, SignUpPage.route());
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Don\'t have an account? ',
+                            style: Theme.of(context).textTheme.titleMedium,
+                            children: [
+                              TextSpan(
+                                text: 'Sign Up',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: AppPallete.gradient2,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },
