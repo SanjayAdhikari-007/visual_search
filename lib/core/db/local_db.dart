@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../features/auth/data/models/user_model.dart';
@@ -23,12 +24,17 @@ class LocalDb {
 
   // Fetches User from Local DB.
   Future<UserModel?> getUser() async {
-    String? email = await _storage.read(key: _emailKey);
-    String? id = await _storage.read(key: _idKey);
-    String? name = await _storage.read(key: _nameKey);
+    try {
+      String? email = await _storage.read(key: _emailKey);
+      String? id = await _storage.read(key: _idKey);
+      String? name = await _storage.read(key: _nameKey);
 
-    if (email != null && id != null && name != null) {
-      return UserModel(id: id, email: email, name: name);
+      if (email != null && id != null && name != null) {
+        return UserModel(id: id, email: email, name: name);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
 
     return null;
