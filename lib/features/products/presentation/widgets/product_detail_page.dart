@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:visual_search/core/theme/app_pallete.dart';
 import 'package:visual_search/features/discover/presentation/cubit/discover_cubit.dart';
 import 'package:visual_search/features/products/data/models/product_model.dart';
+import 'package:visual_search/features/products/presentation/cubit/product_cubit.dart';
+import 'package:visual_search/features/products/presentation/widgets/product_card.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
@@ -20,6 +25,8 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isBrowserMoreClicked = false;
+
     return Scaffold(
       bottomNavigationBar: model.isInStock
           ? Container(
@@ -131,6 +138,14 @@ class ProductDetailPage extends StatelessWidget {
             ),
       appBar: AppBar(
         automaticallyImplyLeading: true,
+        leading: IconButton(
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                context.read<ProductCubit>().getProducts();
+                Navigator.of(context).pop();
+              }
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -264,6 +279,162 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
+              Divider(
+                height: 2,
+              ),
+              StatefulBuilder(builder: (context, setState) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() => isBrowserMoreClicked = true);
+                        String categoryName = context
+                                .read<DiscoverCubit>()
+                                .categoryFromId(model.category)
+                                ?.name ??
+                            "";
+
+                        if (model.pattern == "Solid") {
+                          context
+                              .read<ProductCubit>()
+                              .visualSearchByCategoryAndPatternAndColor(
+                                  categoryName, model.pattern, model.color);
+                        } else {
+                          context
+                              .read<ProductCubit>()
+                              .visualSearchByCategoryAndPattern(
+                                  categoryName, model.pattern);
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: isBrowserMoreClicked
+                              ? AppPallete.buttonBlueColor
+                              : AppPallete.gradient2,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Browse Similar Products"),
+                            Icon(
+                              Icons.arrow_downward,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (isBrowserMoreClicked)
+                      SizedBox(
+                          height: 225,
+                          width: MediaQuery.of(context).size.width,
+                          child: BlocBuilder<ProductCubit, ProductState>(
+                            builder: (context, state) {
+                              if (state is ProductVisualData) {
+                                final similarProducts = state.products.filter((product)=> model.id != product.id).toList();
+
+                                return GridView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: BouncingScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 1,
+                                          crossAxisSpacing: 8,
+                                          mainAxisSpacing: 8,
+                                          childAspectRatio: 1.4),
+                                  itemCount: similarProducts.length,
+                                  itemBuilder: (context, index) {
+                                    return ProductCard(
+                                      model: similarProducts[index],
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDetailPage(
+                                            model: similarProducts[index],
+                                          ),
+                                        ));
+                                      },
+                                    );
+                                  },
+                                );
+                              }
+                              return Shimmer(
+                                child: GridView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: BouncingScrollPhysics(),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 1,
+                                            crossAxisSpacing: 8,
+                                            mainAxisSpacing: 8,
+                                            childAspectRatio: 1.5),
+                                    itemCount: 3,
+                                    itemBuilder: (context, snapshot) {
+                                      return Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: AppPallete.borderColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          spacing: 7,
+                                          children: [
+                                            Container(
+                                              width: 120,
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: AppPallete.subBgColor,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                "assets/icons/Image.svg",
+                                                color: AppPallete.borderColor,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 100,
+                                              height: 12,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: AppPallete.subBgColor,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 60,
+                                              height: 12,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: AppPallete.subBgColor,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 40,
+                                              height: 12,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: AppPallete.subBgColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              );
+                            },
+                          ))
+                  ],
+                );
+              }),
             ],
           ),
         ),
