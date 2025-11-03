@@ -50,7 +50,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           (jsonDecode(response.body) as Map<String, dynamic>)["token"];
 
       LocalDb db = LocalDb();
-      db.saveUser(user, token);
+      await db.saveUser(user, token);
       return user;
     } catch (e) {
       throw ServerException(e.toString());

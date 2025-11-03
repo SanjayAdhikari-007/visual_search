@@ -29,61 +29,117 @@ class ProductDataSourceImpl implements ProductDataSource {
   @override
   Future<List<ProductModel>> getAllProducts() async {
     var client = http.Client();
-    String? token = await LocalDb().getToken();
-    var response = await client
-        .get(Uri.parse("${Constants.baseApiUrl}/products"), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
+    return await LocalDb().getToken().then((val) async {
+      var response = await client
+          .get(Uri.parse("${Constants.baseApiUrl}/products"), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $val',
+      });
+
+      if (response.statusCode == 404 ||
+          response.statusCode == 401 ||
+          response.statusCode == 500) {
+        throw ServerException(
+            (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+      }
+
+      var arr = jsonDecode(response.body) as List<dynamic>;
+
+      List<ProductModel> results = [];
+
+      for (Map<String, dynamic> product in arr) {
+        ProductModel model = ProductModel.fromJson(jsonEncode(product));
+        results.add(model);
+      }
+
+      return results;
     });
+    // String? token = await LocalDb().getToken();
+    // var response = await client
+    //     .get(Uri.parse("${Constants.baseApiUrl}/products"), headers: {
+    //   'Content-Type': 'application/json',
+    //   'Accept': 'application/json',
+    //   'Authorization': 'Bearer $token',
+    // });
 
-    if (response.statusCode == 404 ||
-        response.statusCode == 401 ||
-        response.statusCode == 500) {
-      throw ServerException(
-          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
-    }
+    // if (response.statusCode == 404 ||
+    //     response.statusCode == 401 ||
+    //     response.statusCode == 500) {
+    //   throw ServerException(
+    //       (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    // }
 
-    var arr = jsonDecode(response.body) as List<dynamic>;
+    // var arr = jsonDecode(response.body) as List<dynamic>;
 
-    List<ProductModel> results = [];
+    // List<ProductModel> results = [];
 
-    for (Map<String, dynamic> product in arr) {
-      ProductModel model = ProductModel.fromJson(jsonEncode(product));
-      results.add(model);
-    }
+    // for (Map<String, dynamic> product in arr) {
+    //   ProductModel model = ProductModel.fromJson(jsonEncode(product));
+    //   results.add(model);
+    // }
 
-    return results;
+    // return results;
   }
 
   @override
   Future<List<ProductModel>> getFeatured() async {
     var client = http.Client();
-    String? token = await LocalDb().getToken();
-    var response = await client
-        .get(Uri.parse("${Constants.baseApiUrl}/products/featured"), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
+    return await LocalDb().getToken().then((val) async {
+      var response = await client.get(
+          Uri.parse("${Constants.baseApiUrl}/products/featured"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $val',
+          });
+
+      if (response.statusCode == 404 ||
+          response.statusCode == 401 ||
+          response.statusCode == 500) {
+        throw ServerException(
+            (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+      }
+
+      var arr = jsonDecode(response.body) as List<dynamic>;
+
+      List<ProductModel> results = [];
+
+      for (Map<String, dynamic> product in arr) {
+        ProductModel model = ProductModel.fromJson(jsonEncode(product));
+        results.add(model);
+      }
+
+      return results;
     });
 
-    if (response.statusCode == 404 ||
-        response.statusCode == 401 ||
-        response.statusCode == 500) {
-      throw ServerException(
-          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
-    }
+    // String? token = await LocalDb().getToken();
+    // var response = await client
+    //     .get(Uri.parse("${Constants.baseApiUrl}/products/featured"), headers: {
+    //   'Content-Type': 'application/json',
+    //   'Accept': 'application/json',
+    //   'Authorization': 'Bearer $token',
+    // });
+    // printM(response.statusCode.toString());
+    // printR(response.body);
 
-    var arr = jsonDecode(response.body) as List<dynamic>;
+    // if (response.statusCode == 404 ||
+    //     response.statusCode == 401 ||
+    //     response.statusCode == 500) {
+    //   throw ServerException(
+    //       (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    // }
 
-    List<ProductModel> results = [];
+    // var arr = jsonDecode(response.body) as List<dynamic>;
 
-    for (Map<String, dynamic> product in arr) {
-      ProductModel model = ProductModel.fromJson(jsonEncode(product));
-      results.add(model);
-    }
+    // List<ProductModel> results = [];
 
-    return results;
+    // for (Map<String, dynamic> product in arr) {
+    //   ProductModel model = ProductModel.fromJson(jsonEncode(product));
+    //   results.add(model);
+    // }
+
+    // return results;
   }
 
   @override

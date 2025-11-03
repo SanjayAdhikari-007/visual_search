@@ -31,12 +31,14 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.pattern == "Solid") {
-      context.read<ProductCubit>().visualSearchByCategoryAndPatternAndColor(
-          widget.categoryName, widget.pattern, widget.color);
-    } else {
-      context.read<ProductCubit>().visualSearchByCategoryAndPattern(
-          widget.categoryName, widget.pattern);
+    if (widget.categoryName != 'Others') {
+      if (widget.pattern == "Solid") {
+        context.read<ProductCubit>().visualSearchByCategoryAndPatternAndColor(
+            widget.categoryName, widget.pattern, widget.color);
+      } else {
+        context.read<ProductCubit>().visualSearchByCategoryAndPattern(
+            widget.categoryName, widget.pattern);
+      }
     }
   }
 
@@ -122,19 +124,20 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
                               ])
                         ],
                       ),
-                    Row(
-                      children: [
-                        Text("Pattern: "),
-                        AnimatedTextKit(
-                            isRepeatingAnimation: false,
-                            animatedTexts: [
-                              TypewriterAnimatedText(
-                                widget.pattern,
-                                speed: Duration(milliseconds: 200),
-                              ),
-                            ])
-                      ],
-                    ),
+                    if (widget.categoryName != 'Others')
+                      Row(
+                        children: [
+                          Text("Pattern: "),
+                          AnimatedTextKit(
+                              isRepeatingAnimation: false,
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  widget.pattern,
+                                  speed: Duration(milliseconds: 200),
+                                ),
+                              ])
+                        ],
+                      ),
                   ],
                 )
               ],
@@ -142,6 +145,22 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
             Flexible(
               child: BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
+                  if (widget.categoryName == 'Others') {
+                    return Center(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 150,
+                          ),
+                          SvgPicture.asset(
+                            'assets/images/warning.svg',
+                            height: 130,
+                          ),
+                          Text("Unknown product requested"),
+                        ],
+                      ),
+                    );
+                  }
                   if (state is ProductVisualData) {
                     if (state.products.isNotEmpty) {
                       return GridView.builder(

@@ -283,7 +283,7 @@ void showVisualSearchDialog(
                                     color: AppPallete.buttonBlueColor,
                                   ),
                                   Text(
-                                    'Select Image for visual search',
+                                    'Select Image for Visual Search',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: AppPallete.buttonBlueColor),

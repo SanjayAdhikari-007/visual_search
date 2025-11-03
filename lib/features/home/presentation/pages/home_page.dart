@@ -126,11 +126,14 @@ class _HomePageState extends State<HomePage> {
                         Positioned(
                           right: 0,
                           left: 8,
-                          top: 4,
+                          top: 4.5,
                           bottom: 0,
                           child: Text(
                             state.itemCount.toString(),
-                            style: TextStyle(fontSize: 13, color: primaryColor),
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ]);

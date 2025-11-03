@@ -3,4 +3,3 @@
 2 Skirt
 3 Jacket
 4 Trousers
-5 Others

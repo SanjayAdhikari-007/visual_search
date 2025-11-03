@@ -17,31 +17,59 @@ class CategoryDataSourceImpl implements CategoryDataSource {
   @override
   Future<List<CategoryModel>> getAllCategories() async {
     var client = http.Client();
-    String? token = await LocalDb().getToken();
-    var response = await client
-        .get(Uri.parse("${Constants.baseApiUrl}/categories"), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
+    return await LocalDb().getToken().then((val) async {
+      var response = await client
+          .get(Uri.parse("${Constants.baseApiUrl}/categories"), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $val',
+      });
+
+      if (response.statusCode == 404 ||
+          response.statusCode == 401 ||
+          response.statusCode == 500) {
+        throw ServerException(
+            (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+      }
+
+      var arr = jsonDecode(response.body) as List<dynamic>;
+
+      List<CategoryModel> results = [];
+
+      for (Map<String, dynamic> product in arr) {
+        CategoryModel model = CategoryModel.fromJson(jsonEncode(product));
+        results.add(model);
+      }
+
+      return results;
     });
+    // String? token = await LocalDb().getToken();
+    // var response = await client
+    //     .get(Uri.parse("${Constants.baseApiUrl}/categories"), headers: {
+    //   'Content-Type': 'application/json',
+    //   'Accept': 'application/json',
+    //   'Authorization': 'Bearer $token',
+    // });
+    // printM(response.statusCode.toString());
+    // printR(response.body);
 
-    if (response.statusCode == 404 ||
-        response.statusCode == 401 ||
-        response.statusCode == 500) {
-      throw ServerException(
-          (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
-    }
+    // if (response.statusCode == 404 ||
+    //     response.statusCode == 401 ||
+    //     response.statusCode == 500) {
+    //   throw ServerException(
+    //       (jsonDecode(response.body) as Map<String, dynamic>)["message"]);
+    // }
 
-    var arr = jsonDecode(response.body) as List<dynamic>;
+    // var arr = jsonDecode(response.body) as List<dynamic>;
 
-    List<CategoryModel> results = [];
+    // List<CategoryModel> results = [];
 
-    for (Map<String, dynamic> cat in arr) {
-      CategoryModel model = CategoryModel.fromJson(jsonEncode(cat));
-      results.add(model);
-    }
+    // for (Map<String, dynamic> cat in arr) {
+    //   CategoryModel model = CategoryModel.fromJson(jsonEncode(cat));
+    //   results.add(model);
+    // }
 
-    return results;
+    // return results;
   }
 
   @override
