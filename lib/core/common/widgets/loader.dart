@@ -65,3 +65,27 @@ class AuthLoader extends StatelessWidget {
     );
   }
 }
+
+class LogoLoader extends StatelessWidget {
+  const LogoLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        spacing: 10,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FlickeringOpacity(
+            duration: Duration(milliseconds: 500),
+            child: Image.asset(
+              "assets/images/logo.png",
+              fit: BoxFit.fitHeight,
+              height: 60,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

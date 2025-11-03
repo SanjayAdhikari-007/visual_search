@@ -51,7 +51,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.black,
-                    child: SvgPicture.asset("assets/icons/Profile.svg"),
+                    child: SvgPicture.asset(
+                      "assets/icons/Profile.svg",
+                      color: AppPallete.buttonBlueColor,
+                    ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

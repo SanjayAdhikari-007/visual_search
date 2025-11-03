@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:visual_search/core/common/color_print/color_print.dart';
 
 import '../../../../core/isolates/preprocess_isolate.dart';
 import '../../../../core/isolates/preprocess_params.dart';
@@ -20,22 +21,7 @@ class MultiModelClassifierRepository {
 
   final int inputSize = 224;
 
-  // Future<void> loadModels() async {
-  //   _interpreter1 =
-  //       await Interpreter.fromAsset('assets/ml/category/model.tflite');
-  //   _interpreter2 = await Interpreter.fromAsset('assets/ml/color/model.tflite');
-  //   _interpreter3 =
-  //       await Interpreter.fromAsset('assets/ml/pattern/model.tflite');
-
-  //   _labels1 = (await rootBundle.loadString('assets/ml/category/labels.txt'))
-  //       .split('\n');
-  //   _labels2 =
-  //       (await rootBundle.loadString('assets/ml/color/labels.txt')).split('\n');
-  //   _labels3 = (await rootBundle.loadString('assets/ml/pattern/labels.txt'))
-  //       .split('\n');
-  // }
   Future<void> loadModels() async {
-    // Load interpreters and labels in parallel
     final results = await Future.wait([
       Interpreter.fromAsset('assets/ml/category/model.tflite'),
       Interpreter.fromAsset('assets/ml/color/model.tflite'),
@@ -54,40 +40,14 @@ class MultiModelClassifierRepository {
     _labels3 = (results[5] as String).split('\n');
   }
 
-  /// Outputs Category, Color, Pattern
-  // Future<(Prediction, Prediction, Prediction)> classify(File imageFile) async {
-  //   final image = img.decodeImage(await imageFile.readAsBytes());
-  //   if (image == null) throw Exception('Failed to decode image');
-  //   final resized = img.copyResize(image, width: inputSize, height: inputSize);
-
-  //   final input = Float32List(inputSize * inputSize * 3);
-  //   int index = 0;
-  //   for (int y = 0; y < inputSize; y++) {
-  //     for (int x = 0; x < inputSize; x++) {
-  //       final pixel = resized.getPixel(x, y);
-  //       input[index++] = img.getRed(pixel) / 255.0;
-  //       input[index++] = img.getGreen(pixel) / 255.0;
-  //       input[index++] = img.getBlue(pixel) / 255.0;
-  //     }
-  //   }
-
-  //   final top1 = _runModel(_interpreter1, _labels1, input);
-  //   final top2 = _runModel(_interpreter2, _labels2, input);
-  //   final top3 = _runModel(_interpreter3, _labels3, input);
-
-  //   return (top1, top2, top3);
-  // }
-
   Future<(Prediction, Prediction, Prediction)> classify(File imageFile) async {
     final bytes = await imageFile.readAsBytes();
 
-    // Run preprocessing in background isolate
     final input = await compute(
       preprocessImage,
       PreprocessParams(bytes, inputSize),
     );
 
-    // Run inference (still on main isolate)
     final top1 = _runModel(_interpreter1, _labels1, input);
     final top2 = _runModel(_interpreter2, _labels2, input);
     final top3 = _runModel(_interpreter3, _labels3, input);
@@ -112,6 +72,7 @@ class MultiModelClassifierRepository {
     }
 
     final label = (maxIdx < labels.length) ? labels[maxIdx] : 'Class $maxIdx';
+    printG("Label: ${label} Confidence: ${maxScore}");
     return Prediction(label: label, confidence: maxScore);
   }
 

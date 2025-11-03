@@ -167,8 +167,18 @@ class _VisualSearchPageState extends State<VisualSearchPage> {
                       );
                     } else {
                       return Center(
-                        child: Text(
-                            "Could not find products with requested query"),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 150,
+                            ),
+                            SvgPicture.asset(
+                              'assets/images/not-found.svg',
+                              height: 130,
+                            ),
+                            Text("Could not find product with requested query"),
+                          ],
+                        ),
                       );
                     }
                   }

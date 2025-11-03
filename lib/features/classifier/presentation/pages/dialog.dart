@@ -117,7 +117,10 @@ void showVisualSearchDialog(
               BlocBuilder<ClassifierCubit, ClassifierState>(
                 builder: (context, state) {
                   if (state is ClassifierLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: AppPallete.buttonBlueColor,
+                    ));
                   } else if (state is ClassifierSuccess) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,

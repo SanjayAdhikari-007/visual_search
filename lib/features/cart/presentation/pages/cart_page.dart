@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:visual_search/features/cart/presentation/bloc/cart_bloc.dart';
 
@@ -73,7 +74,17 @@ class CartPage extends StatelessWidget {
               },
             );
           }
-          return Center(child: Text("Cart is empty."));
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/cart.svg',
+                height: 130,
+              ),
+              Text("Your Cart is empty."),
+            ],
+          ));
         },
       ),
     );

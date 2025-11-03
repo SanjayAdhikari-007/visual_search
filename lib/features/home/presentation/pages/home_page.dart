@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                         Positioned(
                           right: 0,
                           left: 8,
-                          top: 3.3,
+                          top: 4,
                           bottom: 0,
                           child: Text(
                             state.itemCount.toString(),
